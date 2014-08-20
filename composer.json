@@ -1,0 +1,21 @@
+{
+    "name": "yutin1987/phelp",
+    "type": "library",
+    "description": "MVC Library for Phalcon",
+    "keywords": ["php", "phelp", "help", "library"],
+    "license": "BSD-3",
+    "authors": [
+        {
+            "name": "YuTin",
+            "email": "yuting1987@gmail.com"
+        }
+    ],
+    "require": {
+        "php": ">=5.3.6",
+    },
+    "autoload": {
+        "psr-0": {
+            "Phelp": "src/"
+        }
+    }
+}
