@@ -53,6 +53,8 @@ class XML
             '<?xml version="1.0" encoding="UTF-8" ?><'.$root.'/>'
         );
 
+        $data = json_decode(json_encode($data), true);
+
         self::appendXml($data, $xmlObj);
 
         return $xmlObj->asXML();
