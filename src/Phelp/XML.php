@@ -71,7 +71,7 @@ class XML
             $data = new SimpleXMLElement($data);
         }
 
-        return json_decode(json_encode($xml));
+        return json_decode(json_encode($data));
     }
 }
 ?>
