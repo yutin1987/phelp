@@ -12,7 +12,33 @@ use \SimpleXMLElement;
  */
 class XML
 {
-    
+
+    /**
+     * 加入XML資料
+     * 
+     * @param object           $data   資料
+     * @param SimpleXMLElement $xmlObj XML
+     * 
+     * @return SimpleXMLElement
+     */
+    private static function appendXml($data, $xmlObj)
+    {
+        foreach ($data as $key => $value) {
+            if (is_array($value)) {
+                if (!is_numeric($key)) {
+                    $subnode = $xmlObj->addChild($key);
+                    self::obj2xml($value, $subnode);
+                } else {
+                    self::obj2xml($value, $xmlObj);
+                }
+            } else {
+                $xmlObj->addChild($key, $value);
+            }
+        }
+
+        return $xmlObj;
+    }
+
     /**
      * object 2 xml
      * 
@@ -27,18 +53,7 @@ class XML
             '<?xml version="1.0" encoding="UTF-8" ?><'.$root.'/>'
         );
 
-        foreach ($data as $key => $value) {
-            if (is_array($value)) {
-                if (!is_numeric($key)) {
-                    $subnode = $xmlObj->addChild($key);
-                    self::obj2xml($value, $subnode);
-                } else {
-                    self::obj2xml($value, $xmlObj);
-                }
-            } else {
-                $xmlObj->addChild($key, $value);
-            }
-        }
+        self::appendXml($data, $xmlObj);
 
         return $xmlObj->asXML();
     }
