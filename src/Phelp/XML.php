@@ -1,6 +1,8 @@
 <?php
 namespace Phelp;
 
+use \SimpleXMLElement;
+
 /**
  * Simple XML Class
  * 
