@@ -27,9 +27,9 @@ class XML
             if (is_array($value)) {
                 if (!is_numeric($key)) {
                     $subnode = $xmlObj->addChild($key);
-                    self::obj2xml($value, $subnode);
+                    self::appendXml($value, $subnode);
                 } else {
-                    self::obj2xml($value, $xmlObj);
+                    self::appendXml($value, $xmlObj);
                 }
             } else {
                 $xmlObj->addChild($key, $value);
