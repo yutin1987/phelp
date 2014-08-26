@@ -49,12 +49,12 @@ class XML
     public static function obj2xml($data, $root = 'root')
     {
         $xmlObj = new SimpleXMLElement(
-            '<?xml version="1.0" encoding="UTF-8" ?><'.$root.'/>'
+            '<?xml version="1.0" encoding="UTF-8" ?>'
         );
 
         $data = json_decode(json_encode($data), true);
 
-        self::appendXml($data, $xmlObj);
+        self::appendXml($data, $xmlObj, $root);
 
         return $xmlObj->asXML();
     }
