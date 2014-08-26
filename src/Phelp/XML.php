@@ -23,9 +23,10 @@ class XML
      */
     private static function appendXml($data, $xmlObj)
     {
+
         foreach ($data as $parent => $child) {
             if (is_array($child)) {
-                if (array_keys($child) !== range(0, (count($child) - 1))) {
+                if (array_keys($child) === range(0, (count($child) - 1))) {
                     foreach ($child as $key => $item) {
                         $sub = $xmlObj->addChild($parent);
                         self::appendXml($item, $sub);
