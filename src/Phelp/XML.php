@@ -25,7 +25,7 @@ class XML
     {
         foreach ($data as $parent => $child) {
             if (is_array($child)) {
-                if (count($child) > 0) {
+                if (array_keys($child) !== range(0, (count($child) - 1))) {
                     foreach ($child as $key => $item) {
                         $sub = $xmlObj->addChild($parent);
                         self::appendXml($item, $sub);
