@@ -21,18 +21,22 @@ class XML
      * 
      * @return SimpleXMLElement
      */
-    private static function appendXml($data, $xmlObj, $parent = 'root')
+    private static function appendXml($data, $xmlObj)
     {
-        if (is_array($data)) {
-            foreach ($data as $key => $item) {
-                if (is_int($key)) {
-                    self::appendXml($item, $xmlObj, $parent);
+        foreach ($data as $parent => $child) {
+            if (is_array($child)) {
+                if (count($child) > 0) {
+                    foreach ($child as $key => $item) {
+                        $sub = $xmlObj->addChild($parent);
+                        self::appendXml($item, $sub);
+                    }
                 } else {
-                    self::appendXml($item, $sub, $key);
+                    $sub = $xmlObj->addChild($parent);
+                    self::appendXml($child, $sub);
                 }
+            } else {
+                $xmlObj->addChild($parent, $child);
             }
-        } else {
-            $xmlObj->addChild($parent, $data);
         }
 
         return $xmlObj;
@@ -49,12 +53,12 @@ class XML
     public static function obj2xml($data, $root = 'root')
     {
         $xmlObj = new SimpleXMLElement(
-            '<?xml version="1.0" encoding="UTF-8" ?>'
+            '<?xml version="1.0" encoding="UTF-8" ?><'.$root.'/>'
         );
 
         $data = json_decode(json_encode($data), true);
 
-        self::appendXml($data, $xmlObj, $root);
+        self::appendXml($data, $xmlObj);
 
         return $xmlObj->asXML();
     }
