@@ -21,19 +21,18 @@ class XML
      * 
      * @return SimpleXMLElement
      */
-    private static function appendXml($data, $xmlObj)
+    private static function appendXml($data, $xmlObj, $parent = 'root')
     {
-        foreach ($data as $key => $value) {
-            if (is_array($value)) {
-                if (!is_numeric($key)) {
-                    $subnode = $xmlObj->addChild($key);
-                    self::appendXml($value, $subnode);
+        if (is_array($data)) {
+            foreach ($data as $key => $item) {
+                if (is_int($key)) {
+                    self::appendXml($item, $xmlObj, $parent);
                 } else {
-                    self::appendXml($value, $xmlObj);
+                    self::appendXml($item, $sub, $key);
                 }
-            } else {
-                $xmlObj->addChild($key, $value);
             }
+        } else {
+            $xmlObj->addChild($parent, $data);
         }
 
         return $xmlObj;
