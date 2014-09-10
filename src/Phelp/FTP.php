@@ -123,6 +123,8 @@ final class FTP
         if (isset($uri['path'])) {
             $this->defaultPath = $uri['path'];
         }
+
+        $this->connect();
     }
 
     /**
@@ -136,7 +138,8 @@ final class FTP
     /**
      * Connect to FTP server
      *
-     * @return bool
+     * @return this
+     * @throws Exception If connect failed
      */
     public function connect()
     {
@@ -156,21 +159,26 @@ final class FTP
 
         if (false == $this->_stream) {
             if (false === $this->ssl) {
-                $this->error = "Failed to connect to {$this->_host}";
+                throw new Exception("Failed to connect to {$this->_host}");
             } elseif (true === $this->ssl) {
-                $this->error = "Failed to connect to {$this->_host} (SSL connection)";
+                throw new Exception("Failed to connect to {$this->_host} (SSL connection)");
             } else {
-                $this->error = "Failed to connect to {$this->_host} (invalid connection type)";
+                throw new Exception("Failed to connect to {$this->_host} (invalid connection type)");
+            }
+        } else {
+            if (!empty($this->_user) && !empty($this->_pwd)) {
+                return $this->login();
+            } else {
+                return $this;
             }
         }
-
-        return ($this->_stream) ? $this->login() : false;
     }
 
     /**
      * Login to FTP
      * 
-     * @return bool
+     * @return this
+     * @throws Exception If 登入失敗
      */
     public function login()
     {
@@ -185,10 +193,10 @@ final class FTP
                 $this->cd($this->defaultPath);
             }
         } else {
-            $this->error = "Failed to connect to {$this->_host} (login failed)";
+            throw new Exception("Failed to connect to {$this->_host} (login failed)");
+        } else {
+            return $this;
         }
-
-        return ($reply) ? true : false;
     }
 
     /**
@@ -210,17 +218,18 @@ final class FTP
      *
      * @param string $folder 資料夾
      * 
-     * @return bool
+     * @return this
+     * @throws Exception If 失敗
      */
     public function cd($folder)
     {
         $reply = ftp_chdir($this->_stream, $folder);
 
         if (!$reply) {
-            $this->error = "Failed to change folder to \"{$folder}\"";
+            throw new Exception("Failed to change folder to \"{$folder}\"");
+        } else {
+            return $this;
         }
-
-        return ($reply) ? true : false;
     }
 
     /**
@@ -229,17 +238,18 @@ final class FTP
      * @param int    $permissions 權限
      * @param string $remote_file 遠端檔案
      * 
-     * @return false
+     * @return this
+     * @throws Exception If 失敗
      */
     public function chmod($permissions, $remote_file = null)
     {
         $reply = ftp_chmod($this->_stream, $permissions, $remote_file);
 
         if (!$reply) {
-            $this->error = "Failed to set file permissions for \"{$remote_file}\"";
+            throw new Exception("Failed to set file permissions for \"{$remote_file}\"");
+        } else {
+            return $this;
         }
-
-        return ($reply) ? true : false;
     }
 
     /**
@@ -248,16 +258,17 @@ final class FTP
      * @param string $remote_file 遠端檔案
      * 
      * @return bool
+     * @throws Exception If 失敗
      */
     public function delete($remote_file = null)
     {
         $reply = ftp_delete($this->_stream, $remote_file);
 
         if (!$reply) {
-            $this->error = "Failed to delete file \"{$remote_file}\"";
+            throw new Exception("Failed to delete file \"{$remote_file}\"");
+        } else {
+            return $this;
         }
-
-        return ($reply) ? true : false;
     }
 
     /**
@@ -267,17 +278,18 @@ final class FTP
      * @param string $local_file  遠端檔案
      * @param int    $mode        模式
      * 
-     * @return bool
+     * @return this
+     * @throws Exception If 失敗
      */
     public function get($remote_file = null, $local_file = null, $mode = FTP_ASCII)
     {
         $reply = ftp_get($this->_stream, $local_file, $remote_file, $mode);
 
         if (!$reply) {
-            $this->error = "Failed to download file \"{$remote_file}\"";
+            throw new Exception("Failed to download file \"{$remote_file}\"");
+        } else {
+            return $this;
         }
-
-        return ($reply) ? true : false;
     }
 
     /**
@@ -286,16 +298,17 @@ final class FTP
      * @param string $directory 遠端路徑
      * 
      * @return array
+     * @throws Exception If 失敗
      */
     public function ls($directory = null)
     {
         $reply = ftp_nlist($this->_stream, $directory);
 
         if (!$reply) {
-            $this->error = "Failed to get directory list";
+            throw new Exception("Failed to get directory list");
+        } else {
+            return $reply;
         }
-
-        return ((bool) $reply) ? $reply : [];
     }
 
     /**
@@ -303,17 +316,18 @@ final class FTP
      *
      * @param string $directory 遠端路徑
      * 
-     * @return bool
+     * @return this
+     * @throws Exception If 失敗
      */
     public function mkdir($directory = null)
     {
         $reply = ftp_mkdir($this->_stream, $directory);
 
         if (!$reply) {
-            $this->error = "Failed to create directory \"{$directory}\"";
+            throw new Exception("Failed to create directory \"{$directory}\"");
+        } else {
+            return $this;
         }
-
-        return ($reply) ? true : false;
     }
      
     /**
@@ -324,16 +338,17 @@ final class FTP
      * @param int    $mode        模式
      * 
      * @return bool
+     * @throws Exception If 失敗
      */
     public function put($local_file = null, $remote_file = null, $mode = FTP_ASCII)
     {
         $reply = ftp_put($this->_stream, $remote_file, $local_file, $mode);
 
         if (!$reply) {
-            $this->error = "Failed to upload file \"{$local_file}\"";
+            throw new Exception("Failed to upload file \"{$local_file}\"");
+        } else {
+            return $this;
         }
-
-        return ($reply) ? true : false;
     }
 
     /**
@@ -352,17 +367,18 @@ final class FTP
      * @param string $old_name 遠端檔案
      * @param string $new_name 新檔名
      * 
-     * @return bool
+     * @return this
+     * @throws Exception If 失敗
      */
     public function rename($old_name = null, $new_name = null)
     {
         $reply = ftp_rename($this->_stream, $old_name, $new_name);
 
         if (!$reply) {
-            $this->error = "Failed to rename file \"{$old_name}\"";
+            throw new Exception("Failed to rename file \"{$old_name}\"");
+        } else {
+            return $this;
         }
-
-        return ($reply) ? true : false;
     }
 
     /**
@@ -370,17 +386,18 @@ final class FTP
      *
      * @param string $directory 遠端路徑
      * 
-     * @return bool
+     * @return this
+     * @throws Exception If 失敗
      */
     public function rmdir($directory = null)
     {
         $reply = ftp_rmdir($this->_stream, $directory);
 
         if (!$reply) {
-            $this->error = "Failed to remove directory \"{$directory}\"";
+            throw new Exception("Failed to remove directory \"{$directory}\"");
+        } else {
+            return $this;
         }
-
-        return ($reply) ? true : false;
     }
 }
 ?>
