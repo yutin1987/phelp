@@ -192,10 +192,10 @@ final class FTP
             if ($this->defaultPath) {
                 $this->cd($this->defaultPath);
             }
+
+            return $this;
         } else {
             throw new Exception("Failed to connect to {$this->_host} (login failed)");
-        } else {
-            return $this;
         }
     }
 
