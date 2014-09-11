@@ -1,6 +1,8 @@
 <?php
 namespace Phelp;
 
+use \Exception;
+
 /**
  * Simple FTP Class
  * 
