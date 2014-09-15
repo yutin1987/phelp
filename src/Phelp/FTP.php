@@ -227,7 +227,7 @@ final class FTP
     {
         $reply = ftp_chdir($this->_stream, $folder);
 
-        if (!$reply) {
+        if (false === $reply) {
             throw new Exception("Failed to change folder to \"{$folder}\"");
         } else {
             return $this;
@@ -247,7 +247,7 @@ final class FTP
     {
         $reply = ftp_chmod($this->_stream, $permissions, $remote_file);
 
-        if (!$reply) {
+        if (false === $reply) {
             throw new Exception("Failed to set file permissions for \"{$remote_file}\"");
         } else {
             return $this;
@@ -266,7 +266,7 @@ final class FTP
     {
         $reply = ftp_delete($this->_stream, $remote_file);
 
-        if (!$reply) {
+        if (false === $reply) {
             throw new Exception("Failed to delete file \"{$remote_file}\"");
         } else {
             return $this;
@@ -287,7 +287,7 @@ final class FTP
     {
         $reply = ftp_get($this->_stream, $local_file, $remote_file, $mode);
 
-        if (!$reply) {
+        if (false === $reply) {
             throw new Exception("Failed to download file \"{$remote_file}\"");
         } else {
             return $this;
@@ -306,7 +306,7 @@ final class FTP
     {
         $reply = ftp_nlist($this->_stream, $directory);
 
-        if (!$reply) {
+        if (false === $reply) {
             throw new Exception("Failed to get directory list");
         } else {
             return $reply;
@@ -325,7 +325,7 @@ final class FTP
     {
         $reply = ftp_mkdir($this->_stream, $directory);
 
-        if (!$reply) {
+        if (false === $reply) {
             throw new Exception("Failed to create directory \"{$directory}\"");
         } else {
             return $this;
@@ -346,7 +346,7 @@ final class FTP
     {
         $reply = ftp_put($this->_stream, $remote_file, $local_file, $mode);
 
-        if (!$reply) {
+        if (false === $reply) {
             throw new Exception("Failed to upload file \"{$local_file}\"");
         } else {
             return $this;
@@ -376,7 +376,7 @@ final class FTP
     {
         $reply = ftp_rename($this->_stream, $old_name, $new_name);
 
-        if (!$reply) {
+        if (false === $reply) {
             throw new Exception("Failed to rename file \"{$old_name}\"");
         } else {
             return $this;
@@ -395,7 +395,7 @@ final class FTP
     {
         $reply = ftp_rmdir($this->_stream, $directory);
 
-        if (!$reply) {
+        if (false === $reply) {
             throw new Exception("Failed to remove directory \"{$directory}\"");
         } else {
             return $this;
