@@ -12,7 +12,7 @@ class Barcode {
      * 
      * @return string SVG code.
      */
-    public static function getBarcodeSVG($code, $type, $w = 2, $h = 30, $color = 'black') {
+    public static function getSVG($code, $type, $w = 2, $h = 30, $color = 'black') {
         $barcode = self::setBarcode($code, $type);
         // replace table for special characters
         $repstr = array("\0" => '', '&' => '&amp;', '<' => '&lt;', '>' => '&gt;');
@@ -48,7 +48,7 @@ class Barcode {
      * 
      * @return string HTML code.
      */
-    public static function getBarcodeHTML($code, $type, $w = 2, $h = 30, $color = 'black') {
+    public static function getHTML($code, $type, $w = 2, $h = 30, $color = 'black') {
         $barcode = self::setBarcode($code, $type);
         $html = '<div style="font-size:0;position:relative;">' . "\n";
         $html = '<div style="font-size:0;position:relative;width:' . ($barcode['maxw'] * $w) . 'px;height:' . ($h) . 'px;">' . "\n";
@@ -78,7 +78,7 @@ class Barcode {
      * 
      * @return image or false in case of error.
      */
-    public static function getBarcodePNG($code, $type, $w = 2, $h = 30, $color = array(0, 0, 0)) {
+    public static function getPNG($code, $type, $w = 2, $h = 30, $color = array(0, 0, 0)) {
         $barcode = self::setBarcode($code, $type);
         // calculate image size
         $width = ($barcode['maxw'] * $w);
